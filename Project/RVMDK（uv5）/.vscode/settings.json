@@ -1,0 +1,23 @@
+{
+    "files.encoding": "gb2312",
+    "files.autoGuessEncoding": true,
+    "files.associations": {
+        "lv_port_indev.h": "c",
+        "key.h": "c",
+        "w25qxx.h": "c",
+        "task.h": "c",
+        "universal_head.h": "c",
+        "usr_code.h": "c",
+        "sd_operate.h": "c",
+        "ff.h": "c",
+        "gui.h": "c",
+        "exfuns.h": "c",
+        "usr_key.h": "c",
+        "lcd.h": "c",
+        "led.h": "c",
+        "font.h": "c",
+        "fonts.h": "c",
+        "FONT.H": "cpp",
+        "ffconf.h": "c"
+    }
+}
