@@ -1,12 +1,8 @@
 #include "gui.h"
 #include "sd_operate.h"
 #include "usr_code.h"
-#define TITLE_SPACE 40
-#define FILE_SPACE 280
-#define MAX_FILE_SHOW 5
-#define SINGLE_FILE_SPACE FILE_SPACE / MAX_FILE_SHOW
-GUI_STATE gui_state = GUI_READING;
-u8 pointer_select = 4;
+GUI_STATE gui_state = GUI_OPENING;
+u8 pointer_select = 0;
 u8 pointer_show = 0;
 u16 select_back_color = LBBLUE;
 u16 reading_back_color = 0XF6F6;
@@ -29,16 +25,16 @@ void draw_select_frame()
     POINT_COLOR = BLACK;
     BACK_COLOR = LIGHTBLUE;
     LCD_Color_Fill(0, 0, 240, TITLE_SPACE, LIGHTBLUE);
-    universal_show_str(60, (int)TITLE_SPACE / 3, 120, TITLE_SPACE, 16, "文件选择");
+    universal_show_str(90, (int)TITLE_SPACE / 3, 120, TITLE_SPACE, 16, "文件选择");
 
-    for (u8 i = pointer_show; i < MAX_FILE_SHOW; i++)
+    for (u8 i = 0; i < MAX_FILE_SHOW; i++)
     {
-        if (i != pointer_select)
+        if (i+pointer_show != pointer_select)
         {
             POINT_COLOR = BLACK;
             BACK_COLOR = LGRAY;
             LCD_DrawRectangle(0, TITLE_SPACE + i * SINGLE_FILE_SPACE, 240, TITLE_SPACE + (i + 1) * SINGLE_FILE_SPACE);
-            universal_show_str(10, TITLE_SPACE + i * SINGLE_FILE_SPACE + (int)SINGLE_FILE_SPACE / 3, 200, 16, 16, filenames[i]);
+            universal_show_str(10, TITLE_SPACE + i * SINGLE_FILE_SPACE + (int)SINGLE_FILE_SPACE / 3, 200, 16, 16, filenames[i+pointer_show]);
         }
         else
         {
@@ -46,7 +42,7 @@ void draw_select_frame()
             BACK_COLOR = LBBLUE;
             LCD_Color_Fill(0, TITLE_SPACE + i * SINGLE_FILE_SPACE, 240, TITLE_SPACE + (i + 1) * SINGLE_FILE_SPACE, LBBLUE);
             LCD_DrawRectangle(0, TITLE_SPACE + i * SINGLE_FILE_SPACE, 240, TITLE_SPACE + (i + 1) * SINGLE_FILE_SPACE);
-            universal_show_str(10, TITLE_SPACE + i * SINGLE_FILE_SPACE + (int)SINGLE_FILE_SPACE / 3, 200, 16, 16, filenames[i]);
+            universal_show_str(10, TITLE_SPACE + i * SINGLE_FILE_SPACE + (int)SINGLE_FILE_SPACE / 3, 200, 16, 16, filenames[i+pointer_show]);
         }
     }
 };

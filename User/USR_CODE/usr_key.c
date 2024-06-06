@@ -1,6 +1,7 @@
 #include "usr_key.h"
 #include "gui.h"
 #include "usr_code.h"
+#include "sd_operate.h"
 // 顺序PG13 PG11 PG2 PG4 PG6 PF1 PF3 PF5
 u8 key_state[8] = {0};
 //已配置下拉电阻 不要外接 不要外接 不要外接
@@ -84,12 +85,40 @@ void usr_key_init()
 }
 void key_handler_up()
 {
-    universal_show_str(30, 150, 200, 16, 16, "UP触发");
+    //universal_show_str(30, 150, 200, 16, 16, "UP触发");
+    switch(gui_state)
+    {
+        case GUI_SELECT:
+            if(pointer_select>0)
+            {
+                if(pointer_show==pointer_select)
+                {
+                    pointer_show--;
+                }
+                pointer_select--;
+            }
+            LCD_Clear(LGRAY);
+            break;
+    }
     key_state[KEY_UP] = 0;
 }
 void key_handler_down()
 {
-    universal_show_str(30, 150, 200, 16, 16, "DOWN触发");
+    //universal_show_str(30, 150, 200, 16, 16, "DOWN触发");
+    switch(gui_state)
+    {
+        case GUI_SELECT:
+            if(pointer_select<file_count-1)
+            {
+                if(pointer_select-pointer_show==MAX_FILE_SHOW-1)
+                {
+                    pointer_show++;
+                }
+                pointer_select++;
+            }
+            LCD_Clear(LGRAY);
+            break;
+    }
     key_state[KEY_DOWN] = 0;
 }
 void key_handler_back()

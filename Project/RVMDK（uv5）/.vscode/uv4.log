@@ -1,28 +1,3 @@
-*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Build target 'SD_CARD'
-compiling main.c...
-compiling usr_key.c...
-..\..\User\USR_CODE\usr_key.c(114): warning:  #1-D: last line of file ends without a newline
-  }
-..\..\User\USR_CODE\usr_key.c: 1 warning, 0 errors
-compiling sd_operate.c...
-..\..\User\USR_CODE\sd_operate.c(25): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
-                  strncpy(filenames[file_count], fno.fname, MAX_FILENAME_LENGTH - 1);
-..\..\User\USR_CODE\sd_operate.c(39): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *"
-          universal_show_str(50, 10 + i * 20, 100, 10, 16, filenames[i]);
-..\..\User\USR_CODE\sd_operate.c(56): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const TCHAR *"
-          res = f_open(&selected_txt_file, filenames[pointer_select], FA_READ);
-..\..\User\USR_CODE\sd_operate.c(59): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *"
-              universal_show_str(30, 130, 200, 16, 16, filenames[pointer_select]);
-..\..\User\USR_CODE\sd_operate.c(75): warning:  #550-D: variable "res"  was set but never used
-      FRESULT res;
-..\..\User\USR_CODE\sd_operate.c(104): warning:  #1-D: last line of file ends without a newline
-  }
-..\..\User\USR_CODE\sd_operate.c(91): warning:  #550-D: variable "res"  was set but never used
-      FRESULT res;
-..\..\User\USR_CODE\sd_operate.c: 7 warnings, 0 errors
-linking...
-Program Size: Code=34600 RO-data=182884 RW-data=120 ZI-data=32136  
-FromELF: creating hex file...
-"..\..\Output\Template.axf" - 0 Error(s), 8 Warning(s).
-Build Time Elapsed:  00:00:01
+Load "..\\..\\Output\\Template.axf" 
+Erase Done.Programming Done.Verify OK.Application running ...
+Flash Load finished at 17:15:54

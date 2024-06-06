@@ -4,6 +4,8 @@
 #include "lcd.h"
 #include "usr_key.h"
 #include "fonts.h"
+#include "gui.h"
+#include "sd_operate.h"
 void sys_init()
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0); // 设置系统中断优先级分组2
@@ -11,13 +13,23 @@ void sys_init()
     uart_init(115200);                              // 不写这行LCD用不了 闹麻了
     LED_Init();                                     // 屁用没有 写着乐呵
     LCD_Init();                                     // LCD初始化
+    POINT_COLOR = RED;
+    LCD_ShowString(50, 10, 200, 16, 16, "STM32F4 EBOOK ");
+    POINT_COLOR = BLUE;
+    LCD_ShowString(50, 30, 200, 16, 16, "SYS INIT COMPLETE");
     usr_key_init();
+    LCD_ShowString(50, 50, 200, 16, 16, "KEY INIT COMPLETE");
     usr_sd_init();									
+    LCD_ShowString(50, 70, 200, 16, 16, "SD INIT COMPLETE");
+    scan_sd_files();
+    LCD_ShowString(50, 90, 200, 16, 16, "FILE SCAN COMPLETE");
+    LCD_ShowString(50, 110, 200, 16, 16, "FIND FILES: ");
+    LCD_ShowNum(50 + 16 * 12, 110, file_count, 3, 16);
+    LCD_ShowString(50, 130, 200, 16, 16, "THREAD START");
     // tp_dev.init();
-    POINT_COLOR = RED; // 设置字体为红色
-    LCD_ShowString(30, 30, 200, 16, 16, "STM32F4 EBOOK ");
-    POINT_COLOR = GREEN;
-    LCD_ShowString(30, 70, 200, 16, 16, "SYS INIT COMPLETE");
+    gui_state = GUI_SELECT;
+    delay_ms(2000);
+    LCD_Clear(LGRAY);
 }
 void usr_sd_init(void)
 {
@@ -53,11 +65,7 @@ void usr_sd_init(void)
         while (1)
             ;
     }
-    else
-    {
-        POINT_COLOR = GREEN;
-        LCD_ShowString(30, 90, 200, 16, 16, "SD INIT COMPLETE.");
-    }
+
 }
 void LCD_ShowChar_CH(u16 x, u16 y, u16 usChar, u8 mode)
 {

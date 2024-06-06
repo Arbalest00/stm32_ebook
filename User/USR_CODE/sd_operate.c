@@ -34,12 +34,10 @@ void scan_sd_files(void)
             file_exist_flag = 1;
         }
     }
-    for (u8 i = 0; i < file_count; i++)
+    /* for (u8 i = 0; i < file_count; i++)
     {
         universal_show_str(50, 10 + i * 20, 100, 10, 16, filenames[i]);
-    }
-    delay_ms(3000);
-    LCD_Clear(WHITE);//0XF6F6
+    } */
 }
 u8 txt_read_buffer[TXT_READ_BUFFER_SIZE];
 u8 file_open_flag = 0;

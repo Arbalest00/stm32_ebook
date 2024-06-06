@@ -8,7 +8,7 @@ u8 task_count = 0;
 void task_init()
 {
     if (SysTick_Config(SystemCoreClock / 1000))
-    { // 1 ms÷–∂œ“ª¥Œ
+    {
         while (1)
         {
             POINT_COLOR = RED;
@@ -90,8 +90,8 @@ void key_scan_task()
     u8 i;
     for (i = 0; i < 8; i++)
     {
-        POINT_COLOR = BLACK;
-        LCD_ShowNum(30+i*16, 30, key_state[i], 1, 16);
+        //POINT_COLOR = BLACK;
+        //LCD_ShowNum(30+i*16, 30, key_state[i], 1, 16);
         if (key_state[i] == 1)
         {
             switch (i)

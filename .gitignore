@@ -1,3 +1,7 @@
+/Output
+*.log
+*.code-workspace
+*.vscode
 # Prerequisites
 *.d
 
