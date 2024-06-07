@@ -19,16 +19,16 @@ void sys_init()
     LCD_ShowString(50, 30, 200, 16, 16, "SYS INIT COMPLETE");
     usr_key_init();
     LCD_ShowString(50, 50, 200, 16, 16, "KEY INIT COMPLETE");
-    usr_sd_init();									
+    usr_sd_init();
     LCD_ShowString(50, 70, 200, 16, 16, "SD INIT COMPLETE");
     scan_sd_files();
     LCD_ShowString(50, 90, 200, 16, 16, "FILE SCAN COMPLETE");
     LCD_ShowString(50, 110, 200, 16, 16, "FIND FILES: ");
-    LCD_ShowNum(50 + 16 * 12, 110, file_count, 3, 16);
+    universal_show_num(150, 110, 200, 16, 16, file_count);
     LCD_ShowString(50, 130, 200, 16, 16, "THREAD START");
     // tp_dev.init();
     gui_state = GUI_SELECT;
-    delay_ms(2000);
+    delay_ms(500);
     LCD_Clear(LGRAY);
 }
 void usr_sd_init(void)
@@ -65,7 +65,6 @@ void usr_sd_init(void)
         while (1)
             ;
     }
-
 }
 void LCD_ShowChar_CH(u16 x, u16 y, u16 usChar, u8 mode)
 {
@@ -74,6 +73,7 @@ void LCD_ShowChar_CH(u16 x, u16 y, u16 usChar, u8 mode)
     GetGBKCode(ucBuffer, usChar);                         // 获取 32x32 中文字符点阵数据
 
     u16 x0 = x;
+    u16 y0 = y;
     u8 csize = WIDTH_CH_CHAR * HEIGHT_CH_CHAR / 8; // 字符对应点阵集所占的字节数
 
     // 注意顺序
@@ -81,6 +81,7 @@ void LCD_ShowChar_CH(u16 x, u16 y, u16 usChar, u8 mode)
     {
         for (bitCount = 0; bitCount < WIDTH_CH_CHAR; bitCount++)
         {
+
             uint8_t byteIndex = (rowCount * WIDTH_CH_CHAR + bitCount) / 8;
             uint8_t bitIndex = 7 - (bitCount % 8);
             if (ucBuffer[byteIndex] & (1 << bitIndex))
@@ -94,7 +95,8 @@ void LCD_ShowChar_CH(u16 x, u16 y, u16 usChar, u8 mode)
         }
     }
 }
-//英文占1字节 汉字2字节
+
+// 英文占1字节 汉字2字节
 void universal_show_str(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)
 {
     u8 x0 = x;
@@ -102,50 +104,42 @@ void universal_show_str(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)
     height += y;
     u16 usChar;
 
-    while (*p != '\0') {
-        if (*p <= 0x7F) { // 判断是否为ASCII字符
-            if (x >= width) { x = x0; y += size; }
-            if (y >= height) break;
+    while (*p != '\0')
+    {
+        if (*p <= 0x7F)
+        { // 判断是否为ASCII字符
+            if (x >= width)
+            {
+                x = x0;
+                y += size;
+            }
+            if (y >= height)
+                break;
 
             LCD_ShowChar(x, y, *p, size, 0); // 显示ASCII字符
             x += size / 2;
             p++;
-        } else { // 处理中文字符
-            if (x >= (width-size/2)) { x = x0; y += size; }
-            if (y >= height) break; // 超出显示区域，退出
+        }
+        else
+        { // 处理中文字符
+            if (x >= width)
+            {
+                x = x0;
+                y += size;
+            }
+            if (y >= height)
+                break; // 超出显示区域，退出
 
             usChar = (*p << 8) | (*(p + 1)); // 获取中文字符的两个字节
-            LCD_ShowChar_CH(x, y, usChar, 0); 
+            LCD_ShowChar_CH(x, y, usChar, 0);
             x += size; // 中文字符占用更多的宽度
             p += 2;
         }
-    }  
-}
-void rtp_test(void)
-{
-    u8 key;
-    u8 i = 0;
-    while (1)
-    {
-        key = KEY_Scan(0);
-        tp_dev.scan(0);
-        if (tp_dev.sta & TP_PRES_DOWN) // 触摸屏被按下
-        {
-            if (tp_dev.x[0] < lcddev.width && tp_dev.y[0] < lcddev.height)
-            {
-                TP_Draw_Big_Point(tp_dev.x[0], tp_dev.y[0], RED); // 画图
-            }
-        }
-        else
-            delay_ms(10);     // 没有按键按下的时候
-        if (key == KEY0_PRES) // KEY0按下,则执行校准程序
-        {
-            LCD_Clear(WHITE); // 清屏
-            TP_Adjust();      // 屏幕校准
-            TP_Save_Adjdata();
-        }
-        i++;
-        if (i % 20 == 0)
-            LED0 = !LED0;
     }
+}
+void universal_show_num(u16 x, u16 y, u16 width, u16 height, u8 size,u32 num)
+{
+    char str[32];
+    sprintf(str,"%u",num);
+    universal_show_str(x, y, width, height, size, str);
 }

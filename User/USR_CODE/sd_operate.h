@@ -7,7 +7,11 @@
 extern u8 filenames[MAX_FILES][MAX_FILENAME_LENGTH]; // 用于存储文件名
 extern u8 file_count; // 文件计数
 extern u8 file_exist_flag;
+extern u8 file_open_flag;
+extern u16 page_ptr;
+extern u32 file_ptr;
 extern u8 txt_read_buffer[TXT_READ_BUFFER_SIZE]; 
+void txt_reset(void); 
 void scan_sd_files(void);
 UINT read_selected_txt(void);
 void load_new_page(void);

@@ -35,14 +35,14 @@ void run_task()
         }
     }
 }
-void add_task(void (*task_func)(void), uint32_t period)
+void add_task(void (*task_func)(void), uint32_t period,u8 initial_status)
 {
     if (task_count < MAX_TASKS)
     {
         tasks[task_count].task_func = task_func;
         tasks[task_count].period = period;
         tasks[task_count].last_run = 0;
-        tasks[task_count].run_flag = 1;
+        tasks[task_count].run_flag = initial_status;
         task_count++;
     }
 };
@@ -64,6 +64,17 @@ void wake_task(void (*func_to_wake)(void))
         if (tasks[i].task_func == func_to_wake)
         {
             tasks[i].run_flag = 1;
+            break;
+        }
+    }
+}
+void change_task_frequency(void (*func_to_change)(void), uint32_t new_period)
+{
+    for (u8 i = 0; i < task_count; i++)
+    {
+        if (tasks[i].task_func == func_to_change)
+        {
+            tasks[i].period = new_period;
             break;
         }
     }
@@ -117,6 +128,34 @@ void key_scan_task()
             default:
                 break;
             }
+        }
+    }
+}
+void time_count_task()
+{
+    if (gui_state == GUI_READING)
+    {
+        reading_time_sec++;
+        if (reading_time_sec == 60)
+        {
+            reading_time_sec = 0;
+            reading_time_min++;
+            if (reading_time_min == 60)
+            {
+                reading_time_min = 0;
+                reading_time_hour++;
+            }
+        }
+    }
+}
+void reading_auto_scroll_task()
+{
+    if (gui_state == GUI_READING)
+    {
+        if (reading_mode == 1)
+        {
+            LCD_Clear(reading_back_color);
+            load_new_page();
         }
     }
 }

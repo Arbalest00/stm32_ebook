@@ -49,14 +49,35 @@ void draw_select_frame()
 // Ò»ÐÐ¿ÉÒÔÓÐ30¸öÓ¢ÎÄ×Ö·û 15¸öºº×Ö Ò²¾ÍÊÇËµÒ»ÐÐ30¸ö×Ö½Ú
 // Ò²¾ÍÊÇËµÈ«²¿ÌîÂúµÄ×´Ì¬ÏÂ  »º´æÇøÖÁÉÙ600¸ö×Ö½Ú
 u16 last_show_char_ptr = 0;
+u8 reading_mode=0;
+u32 scroll_time=2000;
+u32 reading_time_hour=0;
+u32 reading_time_min=0;
+u32 reading_time_sec=0;
 void draw_reading_frame()
 {
     POINT_COLOR = BLACK;
+    BACK_COLOR=LBBLUE;
+    LCD_Color_Fill(0, 0, 240, 16, LBBLUE);
+    universal_show_num(0, 0, 240, 16, 16, reading_time_hour);
+    universal_show_str(16, 0, 240, 16, 16, ":");
+    universal_show_num(32, 0, 240, 16, 16, reading_time_min);
+    universal_show_str(48, 0, 240, 16, 16, ":");
+    universal_show_num(64, 0, 240, 16, 16, reading_time_sec);
+    if(reading_mode==1)
+    {
+        universal_show_str(96, 0, 240, 16, 16, "×Ô¶¯¹öÆÁ");
+        universal_show_num(192, 0, 240, 16, 16, scroll_time);
+        universal_show_str(224, 0, 240, 16, 16, "ms");
+    }
+    else
+    {
+        universal_show_str(96, 0, 240, 16, 16, "ÊÖ¶¯·­Ò³                 ");
+    }
     BACK_COLOR = reading_back_color;
-    universal_show_str(0, 0, 240, 16, 16, "test test test test test");
-    last_show_char_ptr=show_for_reading(0, 16, 240, 304, 16,txt_read_buffer);
+    last_show_char_ptr=show_for_reading(0,16, 240, 308, 16,txt_read_buffer);
 };
-u16 show_for_reading(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)//·µ»ØÆ«ÒÆÖµ
+u16 show_for_reading(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)//»á¶àÏÔÊ¾Ò»ÐÐ ÀÁµÃ¸ÄÁË
 {
     u8 x0 = x;
     width += x;
@@ -65,16 +86,16 @@ u16 show_for_reading(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)//·µ»
     u16 bytecount=0;
     while (*p != '\0') {
         if (*p <= 0x7F) { // ÅÐ¶ÏÊÇ·ñÎªASCII×Ö·û
-            if (x >= width) { x = x0; y += size; }
-            if (y >= height) break;
+            if (x > (width-size/2)) { x = x0; y += size; }
+            if (y > (height-size)) break;
 
             LCD_ShowChar(x, y, *p, size, 0); // ÏÔÊ¾ASCII×Ö·û
             x += size / 2;
             p++;
             bytecount++;
         } else { // ´¦ÀíÖÐÎÄ×Ö·û
-            if (x >= (width-size/2)) { x = x0; y += size; }
-            if (y >= height) break; // ³¬³öÏÔÊ¾ÇøÓò£¬ÍË³ö
+            if (x > (width-size)) { x = x0; y += size; }
+            if (y > (height-size)) break; // ³¬³öÏÔÊ¾ÇøÓò£¬ÍË³ö
 
             usChar = (*p << 8) | (*(p + 1)); // »ñÈ¡ÖÐÎÄ×Ö·ûµÄÁ½¸ö×Ö½Ú
             LCD_ShowChar_CH(x, y, usChar, 0); 
@@ -84,9 +105,6 @@ u16 show_for_reading(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)//·µ»
         }
     }
     return bytecount;  
-}
-void change_page()
-{
 }
 void draw_setting_frame() {
     // draw setting frame

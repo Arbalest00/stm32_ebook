@@ -2679,12 +2679,12 @@ void LCD_ShowChar(u16 x,u16 y,u8 num,u8 size,u8 mode)
 			else if(mode==0)LCD_Fast_DrawPoint(x,y,BACK_COLOR);
 			temp<<=1;
 			y++;
-			if(y>=lcddev.height)return;		//超区域了
+			if(y>lcddev.height)return;		//超区域了
 			if((y-y0)==size)
 			{
 				y=y0;
 				x++;
-				if(x>=lcddev.width)return;	//超区域了
+				if(x>lcddev.width)return;	//超区域了
 				break;
 			}
 		}  	 

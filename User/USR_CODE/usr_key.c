@@ -2,9 +2,10 @@
 #include "gui.h"
 #include "usr_code.h"
 #include "sd_operate.h"
+#include "task.h"
 // 顺序PG13 PG11 PG2 PG4 PG6 PF1 PF3 PF5
 u8 key_state[8] = {0};
-//已配置下拉电阻 不要外接 不要外接 不要外接
+// 已配置下拉电阻 不要外接 不要外接 不要外接
 void usr_key_init()
 {
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -85,50 +86,99 @@ void usr_key_init()
 }
 void key_handler_up()
 {
-    //universal_show_str(30, 150, 200, 16, 16, "UP触发");
-    switch(gui_state)
+    // universal_show_str(30, 150, 200, 16, 16, "UP触发");
+    switch (gui_state)
     {
-        case GUI_SELECT:
-            if(pointer_select>0)
+    case GUI_SELECT:
+        if (pointer_select > 0)
+        {
+            if (pointer_show == pointer_select)
             {
-                if(pointer_show==pointer_select)
-                {
-                    pointer_show--;
-                }
-                pointer_select--;
+                pointer_show--;
             }
-            LCD_Clear(LGRAY);
+            pointer_select--;
+        }
+        LCD_Clear(LGRAY);
+        break;
+    case GUI_READING:
+        if (reading_mode == 0)
+        {
+            LCD_Clear(reading_back_color);
+            load_last_page();
             break;
+        }
+        else
+        {
+            if (scroll_time > 1000)
+            {
+                scroll_time -= 500;
+                change_task_frequency(reading_auto_scroll_task, (u32)(scroll_time / 3));
+            }
+            break;
+        }
     }
     key_state[KEY_UP] = 0;
 }
 void key_handler_down()
 {
-    //universal_show_str(30, 150, 200, 16, 16, "DOWN触发");
-    switch(gui_state)
+    // universal_show_str(30, 150, 200, 16, 16, "DOWN触发");
+    switch (gui_state)
     {
-        case GUI_SELECT:
-            if(pointer_select<file_count-1)
+    case GUI_SELECT:
+        if (pointer_select < file_count - 1)
+        {
+            if (pointer_select - pointer_show == MAX_FILE_SHOW - 1)
             {
-                if(pointer_select-pointer_show==MAX_FILE_SHOW-1)
-                {
-                    pointer_show++;
-                }
-                pointer_select++;
+                pointer_show++;
             }
-            LCD_Clear(LGRAY);
+            pointer_select++;
+        }
+        LCD_Clear(LGRAY);
+        break;
+    case GUI_READING:
+        if (reading_mode == 0)
+        {
+            LCD_Clear(reading_back_color);
+            load_new_page();
             break;
+        }
+        else
+        {
+                scroll_time += 500;
+                change_task_frequency(reading_auto_scroll_task, (u32)(scroll_time / 3));
+            break;
+        }
     }
     key_state[KEY_DOWN] = 0;
 }
 void key_handler_back()
 {
-    universal_show_str(30, 150, 200, 16, 16, "BACK触发");
+    // universal_show_str(30, 150, 200, 16, 16, "BACK触发");
+    switch (gui_state)
+    {
+    case GUI_READING:
+        reading_time_hour=0;
+        reading_time_min=0;
+        reading_time_sec=0;
+        scroll_time=2000;
+        LCD_Clear(LGRAY);
+        txt_reset();
+        gui_state = GUI_SELECT;
+        break;
+    }
     key_state[KEY_BACK] = 0;
 }
 void key_handler_confirm()
 {
-    universal_show_str(30, 150, 200, 16, 16, "CONFIRM触发");
+    // universal_show_str(30, 150, 200, 16, 16, "CONFIRM触发");
+    switch (gui_state)
+    {
+    case GUI_SELECT:
+        LCD_Clear(reading_back_color);
+        gui_state = GUI_READING;
+        read_selected_txt();
+        break;
+    }
     key_state[KEY_CONFIRM] = 0;
 }
 void key_handler_setting()
@@ -138,6 +188,7 @@ void key_handler_setting()
 }
 void key_handler_alternative()
 {
-    universal_show_str(30, 150, 200, 16, 16, "ALTERNATIVE触发");
+    // universal_show_str(30, 150, 200, 16, 16, "ALTERNATIVE触发");
+    reading_mode = !reading_mode;
     key_state[KEY_ALTERNATIVE] = 0;
 }
