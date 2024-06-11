@@ -6,6 +6,23 @@ u8 pointer_select = 0;
 u8 pointer_show = 0;
 u16 select_back_color = LBBLUE;
 u16 reading_back_color = 0XF6F6;
+void gui_draw_frame()
+{
+     switch (gui_state)
+    {
+    case GUI_OPENING:
+        break;
+    case GUI_SELECT:
+        draw_select_frame();
+        break;
+    case GUI_READING:
+        draw_reading_frame();
+        break;
+    case GUI_SETTING:
+        draw_setting_frame();
+        break;
+    }
+}
 void draw_select_frame()
 {
     // draw select frame

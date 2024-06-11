@@ -22,6 +22,7 @@ extern u32 scroll_time;
 extern u32 reading_time_hour;
 extern u32 reading_time_min;
 extern u32 reading_time_sec;
+void gui_draw_frame(void);
 void draw_select_frame(void);
 void draw_reading_frame(void);
 void draw_setting_frame(void);

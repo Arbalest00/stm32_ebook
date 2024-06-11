@@ -81,20 +81,7 @@ void change_task_frequency(void (*func_to_change)(void), uint32_t new_period)
 }
 void gui_draw_frame_task()
 {
-    switch (gui_state)
-    {
-    case GUI_OPENING:
-        break;
-    case GUI_SELECT:
-        draw_select_frame();
-        break;
-    case GUI_READING:
-        draw_reading_frame();
-        break;
-    case GUI_SETTING:
-        draw_setting_frame();
-        break;
-    }
+   gui_draw_frame();
 }
 void key_scan_task()
 {
@@ -136,6 +123,7 @@ void time_count_task()
     if (gui_state == GUI_READING)
     {
         reading_time_sec++;
+        gui_draw_frame();
         if (reading_time_sec == 60)
         {
             reading_time_sec = 0;
@@ -156,6 +144,7 @@ void reading_auto_scroll_task()
         {
             LCD_Clear(reading_back_color);
             load_new_page();
+            gui_draw_frame();
         }
     }
 }

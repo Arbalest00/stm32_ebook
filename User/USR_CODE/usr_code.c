@@ -30,6 +30,7 @@ void sys_init()
     gui_state = GUI_SELECT;
     delay_ms(500);
     LCD_Clear(LGRAY);
+    gui_draw_frame();
 }
 void usr_sd_init(void)
 {

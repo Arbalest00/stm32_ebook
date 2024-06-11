@@ -118,6 +118,7 @@ void key_handler_up()
         }
     }
     key_state[KEY_UP] = 0;
+    gui_draw_frame();
 }
 void key_handler_down()
 {
@@ -150,6 +151,7 @@ void key_handler_down()
         }
     }
     key_state[KEY_DOWN] = 0;
+    gui_draw_frame();
 }
 void key_handler_back()
 {
@@ -167,6 +169,7 @@ void key_handler_back()
         break;
     }
     key_state[KEY_BACK] = 0;
+    gui_draw_frame();
 }
 void key_handler_confirm()
 {
@@ -180,6 +183,7 @@ void key_handler_confirm()
         break;
     }
     key_state[KEY_CONFIRM] = 0;
+    gui_draw_frame();
 }
 void key_handler_setting()
 {
@@ -191,4 +195,5 @@ void key_handler_alternative()
     // universal_show_str(30, 150, 200, 16, 16, "ALTERNATIVE´¥·¢");
     reading_mode = !reading_mode;
     key_state[KEY_ALTERNATIVE] = 0;
+    gui_draw_frame();
 }
