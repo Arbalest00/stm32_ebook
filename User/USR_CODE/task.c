@@ -118,21 +118,35 @@ void key_scan_task()
         }
     }
 }
+u32 time_count=0;
+u32 scroll_count=0;
 void time_count_task()
 {
     if (gui_state == GUI_READING)
     {
-        reading_time_sec++;
-        gui_draw_frame();
-        if (reading_time_sec == 60)
+        time_count+=50;
+        if(reading_mode==1)scroll_count+=50;
+        else scroll_count=0;
+        if (time_count >= 1000)
         {
-            reading_time_sec = 0;
-            reading_time_min++;
-            if (reading_time_min == 60)
+            reading_time_sec++;
+            gui_draw_frame();
+            time_count = 0;
+            if (reading_time_sec == 60)
             {
-                reading_time_min = 0;
-                reading_time_hour++;
+                reading_time_sec = 0;
+                reading_time_min++;
+                if (reading_time_min == 60)
+                {
+                    reading_time_min = 0;
+                    reading_time_hour++;
+                }
             }
+        }
+        if(scroll_count>=scroll_time)
+        {
+            scroll_count=0;
+            reading_auto_scroll_task();
         }
     }
 }
