@@ -24,6 +24,7 @@ extern u32 reading_time_min;
 extern u32 reading_time_sec;
 void gui_draw_frame(void);
 void draw_select_frame(void);
+void draw_reading_top(void);
 void draw_reading_frame(void);
 void draw_setting_frame(void);
 u16 show_for_reading(u16 x, u16 y, u16 width, u16 height, u8 size, char *p);

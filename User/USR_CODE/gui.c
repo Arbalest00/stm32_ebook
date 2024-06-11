@@ -71,6 +71,28 @@ u32 scroll_time=2000;
 u32 reading_time_hour=0;
 u32 reading_time_min=0;
 u32 reading_time_sec=0;
+void draw_reading_top()
+{
+    POINT_COLOR = BLACK;
+    BACK_COLOR=LBBLUE;
+    LCD_Color_Fill(0, 0, 240, 16, LBBLUE);
+    universal_show_num(0, 0, 240, 16, 16, reading_time_hour);
+    universal_show_str(16, 0, 240, 16, 16, ":");
+    universal_show_num(32, 0, 240, 16, 16, reading_time_min);
+    universal_show_str(48, 0, 240, 16, 16, ":");
+    universal_show_num(64, 0, 240, 16, 16, reading_time_sec);
+    if(reading_mode==1)
+    {
+        universal_show_str(96, 0, 240, 16, 16, "自动滚屏");
+        universal_show_num(192, 0, 240, 16, 16, scroll_time);
+        universal_show_str(224, 0, 240, 16, 16, "ms");
+    }
+    else
+    {
+        universal_show_str(96, 0, 240, 16, 16, "手动翻页                 ");
+    }
+    BACK_COLOR = reading_back_color;
+}
 void draw_reading_frame()
 {
     POINT_COLOR = BLACK;

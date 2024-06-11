@@ -130,7 +130,7 @@ void time_count_task()
         if (time_count >= 1000)
         {
             reading_time_sec++;
-            gui_draw_frame();
+            draw_reading_top();
             time_count = 0;
             if (reading_time_sec == 60)
             {
