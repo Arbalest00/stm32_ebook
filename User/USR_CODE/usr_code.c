@@ -40,26 +40,8 @@ void usr_sd_init(void)
 
     // Mount the file system
     res_sd = f_mount(&fs, "0:", 1);
-    if (res_sd == FR_NO_FILESYSTEM)
-    {
-        // Format the filesystem
-        res_sd = f_mkfs("0:", 0, 0);
-        if (res_sd == FR_OK)
-        {
-            // Unmount after formatting
-            res_sd = f_mount(NULL, "0:", 1);
-            // Remount the filesystem
-            res_sd = f_mount(&fs, "0:", 1);
-        }
-        else
-        {
-            POINT_COLOR = RED;
-            LCD_ShowString(30, 90, 200, 16, 16, "Formatting failed.");
-            while (1)
-                ;
-        }
-    }
-    else if (res_sd != FR_OK)
+
+    if (res_sd != FR_OK)
     {
         POINT_COLOR = RED;
         LCD_ShowString(30, 90, 200, 16, 16, "Failed to mount filesystem.");
@@ -72,12 +54,6 @@ void LCD_ShowChar_CH(u16 x, u16 y, u16 usChar, u8 mode)
     uint8_t rowCount, bitCount;
     uint8_t ucBuffer[WIDTH_CH_CHAR * HEIGHT_CH_CHAR / 8]; // 字模数据缓冲区
     GetGBKCode(ucBuffer, usChar);                         // 获取 32x32 中文字符点阵数据
-
-    u16 x0 = x;
-    u16 y0 = y;
-    u8 csize = WIDTH_CH_CHAR * HEIGHT_CH_CHAR / 8; // 字符对应点阵集所占的字节数
-
-    // 注意顺序
     for (rowCount = 0; rowCount < HEIGHT_CH_CHAR; rowCount++)
     {
         for (bitCount = 0; bitCount < WIDTH_CH_CHAR; bitCount++)
@@ -104,35 +80,20 @@ void universal_show_str(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)
     width += x;
     height += y;
     u16 usChar;
-
-    while (*p != '\0')
-    {
-        if (*p <= 0x7F)
-        { // 判断是否为ASCII字符
-            if (x >= width)
-            {
-                x = x0;
-                y += size;
-            }
-            if (y >= height)
-                break;
+    while (*p != '\0') {
+        if (*p <= 0x7F) { // 判断是否为ASCII字符
+            if (x > (width-size/2)) { x = x0; y += size; }
+            if (y > (height-size)) break;
 
             LCD_ShowChar(x, y, *p, size, 0); // 显示ASCII字符
             x += size / 2;
             p++;
-        }
-        else
-        { // 处理中文字符
-            if (x >= width)
-            {
-                x = x0;
-                y += size;
-            }
-            if (y >= height)
-                break; // 超出显示区域，退出
+        } else { // 处理中文字符
+            if (x > (width-size)) { x = x0; y += size; }
+            if (y > (height-size)) break; // 超出显示区域，退出
 
             usChar = (*p << 8) | (*(p + 1)); // 获取中文字符的两个字节
-            LCD_ShowChar_CH(x, y, usChar, 0);
+            LCD_ShowChar_CH(x, y, usChar, 0); 
             x += size; // 中文字符占用更多的宽度
             p += 2;
         }

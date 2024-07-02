@@ -1,3 +1,17 @@
-Load "..\\..\\Output\\Template.axf" 
-Erase Done.Programming Done.Verify OK.Application running ...
-Flash Load finished at 18:40:02
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'SD_CARD'
+compiling sd_operate.c...
+..\..\User\USR_CODE\sd_operate.c(25): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+                  strncpy(filenames[file_count], fno.fname, MAX_FILENAME_LENGTH - 1);
+..\..\User\USR_CODE\sd_operate.c(65): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const TCHAR *"
+          res = f_open(&selected_txt_file, filenames[pointer_select], FA_READ);
+..\..\User\USR_CODE\sd_operate.c(68): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *"
+              universal_show_str(30, 130, 200, 16, 16, filenames[pointer_select]);
+..\..\User\USR_CODE\sd_operate.c(117): warning:  #550-D: variable "res"  was set but never used
+      FRESULT res;
+..\..\User\USR_CODE\sd_operate.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=37324 RO-data=182884 RW-data=156 ZI-data=56716  
+FromELF: creating hex file...
+"..\..\Output\Template.axf" - 0 Error(s), 4 Warning(s).
+Build Time Elapsed:  00:00:02

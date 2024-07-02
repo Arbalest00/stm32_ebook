@@ -42,28 +42,20 @@ void usr_key_init()
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
     EXTI_Init(&EXTI_InitStructure);
-
     EXTI_InitStructure.EXTI_Line = EXTI_Line4;
     EXTI_Init(&EXTI_InitStructure);
-
     EXTI_InitStructure.EXTI_Line = EXTI_Line6;
     EXTI_Init(&EXTI_InitStructure);
-
     EXTI_InitStructure.EXTI_Line = EXTI_Line11;
     EXTI_Init(&EXTI_InitStructure);
-
     EXTI_InitStructure.EXTI_Line = EXTI_Line13;
     EXTI_Init(&EXTI_InitStructure);
-
     EXTI_InitStructure.EXTI_Line = EXTI_Line1;
     EXTI_Init(&EXTI_InitStructure);
-
     EXTI_InitStructure.EXTI_Line = EXTI_Line3;
     EXTI_Init(&EXTI_InitStructure);
-
     EXTI_InitStructure.EXTI_Line = EXTI_Line5;
     EXTI_Init(&EXTI_InitStructure);
-
     // 配置中断优先级并启用中断
 
     NVIC_InitStructure.NVIC_IRQChannel = EXTI1_IRQn;
@@ -84,16 +76,12 @@ void usr_key_init()
     NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
     NVIC_Init(&NVIC_InitStructure);
 }
-void key_handler_up()
-{
+void key_handler_up(){
     // universal_show_str(30, 150, 200, 16, 16, "UP触发");
-    switch (gui_state)
-    {
+    switch (gui_state){
     case GUI_SELECT:
-        if (pointer_select > 0)
-        {
-            if (pointer_show == pointer_select)
-            {
+        if (pointer_select > 0){
+            if (pointer_show == pointer_select){
                 pointer_show--;
             }
             pointer_select--;
@@ -101,18 +89,14 @@ void key_handler_up()
         LCD_Clear(LGRAY);
         break;
     case GUI_READING:
-        if (reading_mode == 0)
-        {
+        if (reading_mode == 0){
             LCD_Clear(reading_back_color);
             load_last_page();
             break;
         }
-        else
-        {
-            if (scroll_time > 1000)
-            {
+        else{
+            if (scroll_time > 1000){
                 scroll_time -= 500;
-                change_task_frequency(reading_auto_scroll_task, (u32)(scroll_time / 3));
             }
             break;
         }
@@ -120,16 +104,12 @@ void key_handler_up()
     key_state[KEY_UP] = 0;
     gui_draw_frame();
 }
-void key_handler_down()
-{
+void key_handler_down(){
     // universal_show_str(30, 150, 200, 16, 16, "DOWN触发");
-    switch (gui_state)
-    {
+    switch (gui_state){
     case GUI_SELECT:
-        if (pointer_select < file_count - 1)
-        {
-            if (pointer_select - pointer_show == MAX_FILE_SHOW - 1)
-            {
+        if (pointer_select < file_count - 1){
+            if (pointer_select - pointer_show == MAX_FILE_SHOW - 1){
                 pointer_show++;
             }
             pointer_select++;
@@ -137,16 +117,13 @@ void key_handler_down()
         LCD_Clear(LGRAY);
         break;
     case GUI_READING:
-        if (reading_mode == 0)
-        {
+        if (reading_mode == 0){
             LCD_Clear(reading_back_color);
             load_new_page();
             break;
         }
-        else
-        {
-                scroll_time += 500;
-                change_task_frequency(reading_auto_scroll_task, (u32)(scroll_time / 3));
+        else{
+            scroll_time += 500;
             break;
         }
     }
@@ -159,10 +136,10 @@ void key_handler_back()
     switch (gui_state)
     {
     case GUI_READING:
-        reading_time_hour=0;
-        reading_time_min=0;
-        reading_time_sec=0;
-        scroll_time=2000;
+        reading_time_hour = 0;
+        reading_time_min = 0;
+        reading_time_sec = 0;
+        scroll_time = 2000;
         LCD_Clear(LGRAY);
         txt_reset();
         gui_state = GUI_SELECT;

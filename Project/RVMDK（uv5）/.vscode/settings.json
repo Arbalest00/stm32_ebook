@@ -18,6 +18,7 @@
         "font.h": "c",
         "fonts.h": "c",
         "FONT.H": "cpp",
-        "ffconf.h": "c"
+        "ffconf.h": "c",
+        "bsp_sdio_sd.h": "c"
     }
 }

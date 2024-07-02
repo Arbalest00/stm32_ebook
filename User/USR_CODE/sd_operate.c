@@ -35,15 +35,11 @@ void scan_sd_files(void)
         }
         memset(txt_read_buffer, 0, sizeof(txt_read_buffer));
     }
-    /* for (u8 i = 0; i < file_count; i++)
-    {
-        universal_show_str(50, 10 + i * 20, 100, 10, 16, filenames[i]);
-    } */
 }
 u8 txt_read_buffer[TXT_READ_BUFFER_SIZE];
 u8 file_open_flag = 0;
 u16 page_ptr = 0;
-u16 page_addr[8192]; // 最大支持约4MB的文件 第n项储存第n+1页的地址
+u32 page_addr[8*1024]; // 最大支持约4MB的文件 第n项储存第n+1页的地址
 u32 file_ptr = 0;
 FIL selected_txt_file;
 UINT last_read = 0;
@@ -79,7 +75,7 @@ UINT read_selected_txt()
         while (1)
             ;
     }
-    last_read = bytes_read;
+    last_read = bytes_read;//用来判断是否到文件末尾，防止地址溢出
     return bytes_read;
 }
 

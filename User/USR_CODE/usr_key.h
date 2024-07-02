@@ -1,7 +1,7 @@
 #ifndef __USR_KEY_H
 #define __USR_KEY_H
 #include "universal_head.h"
-//备选PG13 PG11 PG2 PG4 PG6 Pf1 PF3 PF5
+//备选PG13 PG11 PG2 PG4 PG6 PF1 PF3 PF5
 #define KEY_UP 1 //PG11
 #define KEY_DOWN 5 //PF1
 #define KEY_BACK 3 //PG2
